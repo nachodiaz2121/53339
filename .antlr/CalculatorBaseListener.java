@@ -1,4 +1,4 @@
-// Generated from c://Users//Mariana//OneDrive - docentes.frm.utn.edu.ar//SSL//2025//ANTLR4//antlr-calculator-project//Calculator.g4 by ANTLR 4.13.1
+// Generated from c:/Users/Patricia/ssl-antlr-calculator/Calculator.g4 by ANTLR 4.13.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -35,6 +35,30 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStat(CalculatorParser.StatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDecl(CalculatorParser.DeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDecl(CalculatorParser.DeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssign(CalculatorParser.AssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssign(CalculatorParser.AssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

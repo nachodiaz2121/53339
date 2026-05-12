@@ -1,29 +1,28 @@
 grammar Calculator;
 
-//Gramatica
-prog: stat+;
-
-stat: expr NEWLINE?              #printExpr
-    | ID EQ expr NEWLINE?        #assign
-    | NEWLINE                   #blank
+dsl
+    : accion+ EOF
     ;
 
-expr: expr op=(MUL|DIV) expr    #MulDiv
-    | expr op=(ADD|SUB) expr    #AddSub
-    | INT                       #int
-    | ID                        #id
-    | LPAREN expr RPAREN        #parens
+accion
+    : 'accion' NOMBRE '{' comando+ '}'
     ;
 
-//Lexemas
-MUL : '*';
-DIV : '/';
-ADD : '+';
-SUB : '-';
-EQ: '=';
-ID : [a-zA-Z]+;
-INT : [0-9];
-LPAREN : '(';
-RPAREN : ')';
-NEWLINE:'\r'? '\n';
-WS: [ \t]+ -> skip;
+comando
+    : 'moverArchivo' STRING STRING
+    | 'usarEscaneoProfundo'
+    | 'retornar' 'resultado'
+    | 'notificar' STRING
+    ;
+
+NOMBRE
+    : '\'' [a-zA-Z][a-zA-Z0-9_]* '\''
+    ;
+
+STRING
+    : '\'' (~['\r\n])* '\''
+    ;
+
+WS
+    : [ \t\r\n]+ -> skip
+    ;

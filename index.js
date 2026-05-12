@@ -1,62 +1,155 @@
-import CalculatorLexer from "./generated/CalculatorLexer.js";
-import CalculatorParser from "./generated/CalculatorParser.js";
-import { CustomCalculatorListener } from "./CustomCalculatorListener.js";
-import { CustomCalculatorVisitor } from "./CustomCalculatorVisitor.js";
-import antlr4, { CharStreams, CommonTokenStream, ParseTreeWalker } from "antlr4";
-import readline from 'readline';
+import antlr4 from 'antlr4';
 import fs from 'fs';
 
-async function main() {
-    let input;
+import CalculatorLexer from './generated/CalculatorLexer.js';
+import CalculatorParser from './generated/CalculatorParser.js';
 
-    // Intento leer la entrada desde el archivo input - en forma sincrona.
-    try {
-        input = fs.readFileSync('input.txt', 'utf8');
-    } catch (err) {
-        // Si no es posible leer el archivo, solicitar la entrada del usuario por teclado
-        input = await leerCadena(); // Simula lectura síncrona
-        console.log(input);
-    }
+// =================================
+// LEER ARCHIVO
+// =================================
 
-    // Proceso la entrada con el analizador e imprimo el arbol de analisis en formato texto
-    let inputStream = CharStreams.fromString(input);
-    let lexer = new CalculatorLexer(inputStream);
-    let tokenStream = new CommonTokenStream(lexer);
-    let parser = new CalculatorParser(tokenStream);
-    let tree = parser.prog();
-    
-    // Verifico si se produjeron errores
-    if (parser.syntaxErrorsCount > 0) {
-        console.error("\nSe encontraron errores de sintaxis en la entrada.");
-    } 
-    else {
-        console.log("\nEntrada válida.");
-        const cadena_tree = tree.toStringTree(parser.ruleNames);
-        console.log(`Árbol de derivación: ${cadena_tree}`);
+const fileName = process.argv[2] || 'input.txt';
 
-        // Utilizo un listener y un walker para recorrer el arbol e indicar cada vez que reconoce una sentencia (stat)
-        //const listener = new CustomCalculatorListener();
-        // ParseTreeWalker.DEFAULT.walk(listener, tree);
+const input = fs.readFileSync(fileName, 'utf8');
 
-        // Utilizo un visitor para visitar los nodos que me interesan de mi arbol
-        const visitor = new CustomCalculatorVisitor();
-        visitor.visit(tree);   
-    }
+// =================================
+// ANALISIS LEXICO
+// =================================
+
+const chars = new antlr4.InputStream(input);
+
+const lexer = new CalculatorLexer(chars);
+
+console.log("TABLA DE TOKENS");
+console.log("---------------------");
+
+let token = lexer.nextToken();
+
+while (token.type !== antlr4.Token.EOF) {
+
+    console.log(
+        `Lexema: ${token.text} -> Token: ${token.type}`
+    );
+
+    token = lexer.nextToken();
 }
 
-function leerCadena() {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+lexer.reset();
 
-    return new Promise(resolve => {
-        rl.question("Ingrese una cadena: ", (answer) => {
-            rl.close();
-            resolve(answer);
-        });
-    });
+// =================================
+// ANALISIS SINTACTICO
+// =================================
+
+const tokens =
+new antlr4.CommonTokenStream(lexer);
+
+const parser =
+new CalculatorParser(tokens);
+
+parser.buildParseTrees = true;
+
+console.log("\nANALISIS SINTACTICO");
+console.log("---------------------");
+
+const tree = parser.dsl();
+
+if (parser._syntaxErrors > 0) {
+
+    console.log("Entrada inválida");
+
+    process.exit(1);
 }
 
-// Ejecuta la función principal
-main();
+console.log("Entrada válida");
+
+console.log("Entrada válida");
+
+// =================================
+// ARBOL
+// =================================
+
+console.log("\nARBOL SINTACTICO");
+console.log("---------------------");
+
+console.log(
+    tree.toStringTree(parser.ruleNames)
+);
+
+// =================================
+// INTERPRETACION
+// =================================
+
+console.log("\nINTERPRETACION");
+console.log("---------------------");
+
+const lines = input.split('\n');
+
+let currentAction = "";
+
+for (let line of lines) {
+
+    line = line.trim();
+
+    if (line.startsWith("accion")) {
+
+        const match =
+        line.match(/'([^']+)'/);
+
+        if (match) {
+
+            currentAction = match[1];
+
+            console.log(
+                `\n▶ Acción: ${currentAction}`
+            );
+        }
+    }
+
+    else if (
+        line.startsWith("notificar")
+    ) {
+
+        const match =
+        line.match(/'([^']+)'/);
+
+        if (match) {
+
+            console.log(
+                `NOTIFICACION: ${match[1]}`
+            );
+        }
+    }
+
+    else if (
+        line.startsWith("moverArchivo")
+    ) {
+
+        const matches =
+        [...line.matchAll(/'([^']+)'/g)];
+
+        if (matches.length >= 2) {
+
+            console.log(
+                `Mover archivo:\n${matches[0][1]} -> ${matches[1][1]}`
+            );
+        }
+    }
+
+    else if (
+        line.startsWith("usarEscaneoProfundo")
+    ) {
+
+        console.log(
+            "Escaneo profundo activado"
+        );
+    }
+
+    else if (
+        line.startsWith("retornar resultado")
+    ) {
+
+        console.log(
+            "Retornando resultado"
+        );
+    }
+}

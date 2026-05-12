@@ -1,7 +1,3 @@
-accion 'log_error' {
-   notificar 'Error durante el procesamiento.'
-}
-
 accion 'backup' {
    moverArchivo 'C:/datos.txt' 'D:/backup/datos.txt'
    usarEscaneoProfundo

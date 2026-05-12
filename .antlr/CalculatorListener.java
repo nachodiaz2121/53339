@@ -1,4 +1,4 @@
-// Generated from c://Users//Mariana//OneDrive - docentes.frm.utn.edu.ar//SSL//2025//ANTLR4//antlr-calculator-project//Calculator.g4 by ANTLR 4.13.1
+// Generated from c:/Users/Patricia/ssl-antlr-calculator/Calculator.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -26,6 +26,26 @@ public interface CalculatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStat(CalculatorParser.StatContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CalculatorParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterDecl(CalculatorParser.DeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CalculatorParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitDecl(CalculatorParser.DeclContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CalculatorParser#assign}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssign(CalculatorParser.AssignContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CalculatorParser#assign}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssign(CalculatorParser.AssignContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CalculatorParser#expr}.
 	 * @param ctx the parse tree
